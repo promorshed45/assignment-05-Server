@@ -1,4 +1,5 @@
-import httpStatus, { NOT_FOUND } from "http-status";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { Service } from "../service/service.model";
 import { TSlot } from "./slot.interface";
@@ -44,15 +45,60 @@ const createSlotIntoDB = async (payload: TSlot, duration: number) => {
   return createSlot;
 };
 
+const getAllSlots = async (date?: string, serviceId?: string) => {
+  // const filter: any = { isBooked: "available" };
+  const filter: any = {};
 
-const getAvailableSlots = async (serviceId: string, date: string) => {
+  if (date) {
+    filter.date = new Date(date);
+  }
 
-  const slots = await Slot.find({ service: serviceId, date }).populate('service');
+  if (serviceId) {
+    filter.service = serviceId;
+  }
+
+  const slots = await Slot.find(filter).populate("service");
   return slots;
 };
 
+const getSingleSlot = async (id: string) => {
+  try {
+    const slot = await Slot.findById(id).populate("service");
+    if (!slot) {
+      throw new Error("Slot not found");
+    }
+    return slot;
+  } catch (error) {
+    console.error("Error retrieving slot:", error);
+    throw error;
+  }
+};
+
+const updateSlotStatus = async (id: string, status: string) => {
+  const slot = await Slot.findById(id);
+  
+  if (!slot) {
+    throw new AppError(httpStatus.NOT_FOUND, "Slot not found");
+  }
+
+  // Check if the slot is already booked
+  if (slot.isBooked === 'booked') {
+    throw new AppError(httpStatus.BAD_REQUEST, "Cannot update a booked slot");
+  }
+
+  // Only allow status to be updated to 'available' or 'cancelled'
+  if (status !== 'available' && status !== 'cancelled') {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid status update");
+  }
+
+  slot.isBooked = status;
+  await slot.save();
+  return slot;
+};
 
 export const slotService = {
   createSlotIntoDB,
-  getAvailableSlots
+  getAllSlots,
+  updateSlotStatus,
+  getSingleSlot,
 };

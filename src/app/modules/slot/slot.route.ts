@@ -5,7 +5,16 @@ const router = express.Router();
 
 router.get(
     "/availability",
-    slotControllers.getAvailableSlots
+    slotControllers.getAllSlots
+  );
+  router.get(
+    "/availability/:slotId", 
+    slotControllers.getSingleSlot);
+  
+  router.patch(
+    "/:slotId",
+    // auth(USER_ROLE.admin),
+    slotControllers.updateSlotStatus
   );
 
 

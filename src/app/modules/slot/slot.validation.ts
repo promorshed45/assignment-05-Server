@@ -6,7 +6,7 @@ export const createSlotValidation = z.object({
     date: z.string(),
     startTime: z.string(),
     endTime: z.string(),
-    isBooked: z.enum(['available', 'booked', 'canceled']).optional(),
+    isBooked: z.enum(['available', 'booked', 'cancelled']).optional(),
   })
 });
 

@@ -9,7 +9,7 @@ const SlotSchema = new Schema<TSlot>({
     endTime: { type: String, required: [true, 'Approximate end time of the slot is required'] },
     isBooked: {
         type: String,
-        enum: ['available', 'booked', 'canceled'],
+        enum: ['available', 'booked', 'cancelled'],
         default: 'available'
     },
 },{

@@ -20,27 +20,51 @@ const createSlot = catchAsync(async (req, res) => {
 });
 
 
-const getAvailableSlots = catchAsync(async (req, res) => {
-
+const getAllSlots = catchAsync(async (req, res) => {
   const { date, serviceId } = req.query;
-
-  if (!date || !serviceId) {
-    res.status(400).json({ success: false, message: 'Date and serviceId are required' });
-    return;
-  }
-
-  const result = await slotService.getAvailableSlots(serviceId as string, date as string);
+  const result = await slotService.getAllSlots(
+    date as string,
+    serviceId as string
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Available slots retrieved successfully',
+    message: "Available slots retrieved successfully",
+    data: result,
+  });
+});
+
+const getSingleSlot = catchAsync(async (req, res) => {
+  const { slotId } = req.params;
+  const result = await slotService.getSingleSlot(slotId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Available slots retrieved successfully",
     data: result,
   });
 });
 
 
+const updateSlotStatus = catchAsync(async (req, res) => {
+  const { slotId } = req.params;
+  const { isBooked } = req.body;
+
+  const result = await slotService.updateSlotStatus(slotId, isBooked);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Slot status updated successfully",
+    data: result,
+  });
+});
+
 export const slotControllers = {
   createSlot,
-  getAvailableSlots
+  getAllSlots,
+  updateSlotStatus,
+  getSingleSlot
 };

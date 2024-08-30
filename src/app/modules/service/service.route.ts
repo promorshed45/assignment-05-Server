@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   "/",
-  auth("admin"),
+  // auth("admin"),
   validateRequest(ServiceValidations.createServiceValidation),
   serviceControllers.createService
 );
@@ -24,19 +24,19 @@ router.get(
 );
 router.put(
   "/:id",
-  auth("admin"),
+  // auth("admin"),
   validateRequest(ServiceValidations.updateServiceValidation),
   serviceControllers.updateService
 );
 router.delete(
   "/:id",
-  auth("admin"),
+  // auth("admin"),
   serviceControllers.softDeleteService
 );
 
 router.post(
   "/slots",
-  auth("admin"),
+  // auth("admin"),
   validateRequest(SlotValidations.createSlotValidation),
   slotControllers.createSlot
 );

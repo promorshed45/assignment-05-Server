@@ -7,8 +7,8 @@ export const createUserValidation = z.object({
         email: z.string().email(),
         password: z.string(),
         phone: z.string(),
-        role: z.nativeEnum(USER_ROLE),
-        address: z.string(),
+        role: z.nativeEnum(USER_ROLE).default('user'),
+        address: z.string().optional()
     })
 });
 

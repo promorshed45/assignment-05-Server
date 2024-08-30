@@ -16,7 +16,7 @@ app.use('/api', router)
 
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hellow World')
+  res.send('Hellow World!, Assignment-5')
 });
 
 app.use(globalErrorHandler);
