@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
@@ -41,6 +43,7 @@ const loginUser = async (payload: TLoginUser) => {
   const jwtPayload = {
     email: user.email,
     role: user.role,
+    name: user.name,
   };
 
   const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {

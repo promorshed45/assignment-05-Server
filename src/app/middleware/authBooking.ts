@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import AppError from "../errors/AppError";
