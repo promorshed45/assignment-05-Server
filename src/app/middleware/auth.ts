@@ -1,42 +1,46 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import config from "../config";
-import AppError from "../errors/AppError";
 import { User } from "../modules/user/user.model";
 import { USER_ROLE } from "../modules/user/user.constants";
 import catchAsync from "../utils/catechAsync";
+import AppError from "../errors/AppError";
+import config from "../config";
+
 
 export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const accessToken = req.headers.authorization;
 
-    let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1];
+    if (!accessToken || !accessToken.startsWith("Bearer ")) {
+      throw new AppError(401, "You are not authorized to access this route");
     }
 
-    if (!token) {
-      throw new AppError(401, "No token provided");
-    }
+    const token = accessToken.split(" ")[1];
 
     const verifiedToken = jwt.verify(
       token as string,
       config.jwt_access_secret as string
-    ) as JwtPayload;
+    );
 
-    const { role, email } = verifiedToken;
+    // console.log('Verified Token Payload:', verifiedToken); // Log the token payload
 
-    const user = await User.findOne({ email });
+    const { role, userId, email, name } = verifiedToken as JwtPayload;
 
-    if (!user) {
-      throw new AppError(401, "You have no access to this route");
+    // console.log('Extracted Name:', name); // Log the name to ensure it is extracted
+
+    const user = await User.findById(userId);
+    console.log(user);
+
+    if (!user || !email) {
+      throw new AppError(401, "User not found");
     }
 
     if (!requiredRoles.includes(role)) {
-      throw new AppError(401, "You have no access to this route");
+      throw new AppError(401, "You are not authorized to access this route");
     }
 
-    // Attach user information to the request object
-    req.user = user;
+    req.userId = userId;
+    req.name = name;
 
     next();
   });

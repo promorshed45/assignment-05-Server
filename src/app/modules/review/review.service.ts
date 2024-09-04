@@ -6,8 +6,8 @@ const createReview = async (payload: TReview) => {
 };
 
 const getAllReviews = async () => {
-  const users = await Review.find();
-  return users;
+  const reviews = await Review.find().populate('userId');
+  return reviews;
 };
 
 export const reviewService = {

@@ -7,4 +7,4 @@ router.post("/", reviewController.createReview);
 router.get("/", reviewController.getAllReviews);
 
 
-export const reviewRoute = router;
+export const ReviewRoute = router;

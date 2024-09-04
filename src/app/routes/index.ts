@@ -3,7 +3,9 @@ import { AuthRoute } from "../modules/auth/auth.route";
 import { ServiceRoute } from "../modules/service/service.route";
 import { BookingRoute } from "../modules/booking/booking.route";
 import { SlotRoute } from "../modules/slot/slot.route";
-import { reviewRoute } from "../modules/review/review.route";
+import { ReviewRoute } from "../modules/review/review.route";
+import { UserRoute } from "../modules/user/user.route";
+import { PaymentRoute } from "../modules/payment/payment.route";
 
 
 const router = Router();
@@ -27,8 +29,16 @@ const moduleRoutes = [
     },
     {
         path: "/reviews",
-        route: reviewRoute,
-      },
+        route: ReviewRoute,
+    },
+    {
+        path: "/users",
+        route: UserRoute,
+    },
+    {
+        path: "/payment",
+        route: PaymentRoute,
+    },
 ]
 
 moduleRoutes.forEach(route => router.use(route.path, route.route))

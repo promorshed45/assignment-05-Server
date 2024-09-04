@@ -18,6 +18,7 @@ router.get(
   auth("admin"),
   BookingController.getAllBookings
 );
+
 router.get(
   "/my-bookings",
   auth("user"),
