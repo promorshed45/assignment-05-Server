@@ -51,7 +51,7 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
 
   //! Payment
   const paymentSession = await initiatePayment(paymentData);
-  // console.log(paymentSession);
+  console.log(paymentSession);
 
   // Update slot status to booked
   slot.isBooked = "booked";
